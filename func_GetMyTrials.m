@@ -1,8 +1,12 @@
 function myTrials = func_GetMyTrials
 
 % load in excel and convert to table
-stimuli = table2struct( readtable('/Users/emilyschwartz/Desktop/Projects/DynFaces_fMRI/DynFaces-Localizer-1-fMRI/Stimuli/Localizer1_stimuli.xlsx') );
+%stimuli = table2struct( readtable('/Users/emilyschwartz/Desktop/Projects/DynFaces_fMRI/DynFaces-Localizer-1-fMRI/Stimuli/Localizer1_stimuli.xlsx') );
+%stimuli = table2struct( readtable('./Stimuli/Localizer1_stimuli.xlsx') );
+% ^ had absolute paths
+stimuli = table2struct( readtable('./Stimuli/Localizer1_stimuli.csv') ); % relative paths
 stimuli_T = struct2table(stimuli);
+
 
 % shuffle stimuli
 [NumRow,NumCol] = size(stimuli_T);
@@ -149,7 +153,10 @@ end
 for trial = 1:240
     myTrials(trial).FilePath = all_filepaths(trial);
 end
-%myTrials.FilePath = all_filepaths;
+
+
+[~,index] = sortrows([myTrials.Block].'); myTrials = myTrials(index); clear index
+% ^ Sort by block
 
 end
     
