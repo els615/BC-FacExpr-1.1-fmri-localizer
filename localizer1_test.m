@@ -96,7 +96,7 @@ WaitSecs(1)
                 t_hold = GetSecs;
 
                 if trial ~= 10
-                    while GetSecs <= (t_hold + 0.5) %@Emily <- why this dif for pics
+                    while GetSecs <= (t_hold + 0.4) %@Emily <- why this dif for pics 
                     %WaitSecs(1)
                     Screen('TextSize', win, 80)
                     DrawFormattedText(win, '.','center','center',[255 255 255]);
