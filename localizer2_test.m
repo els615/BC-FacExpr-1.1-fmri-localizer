@@ -139,8 +139,8 @@ WaitSecs(1)
         % Make sure we have the folder
         if ~exist('Data','dir')==7;mkdir('Data');end 
 
-        save(fullfile('Data',sprintf('myTrials_S%02d-run-%02d.mat',subID,runID)),'myTrials');
-        save(fullfile('Data',sprintf('workspace_S%02d-run-%02d.mat',subID,runID))); 
+        save(fullfile('localizer2/Data',sprintf('myTrials_S%02d-run-%02d.mat',subID,runID)),'myTrials');
+        save(fullfile('localizer2/Data',sprintf('workspace_S%02d-run-%02d.mat',subID,runID))); 
 
         % fixation cross between blocks 
         Screen('TextSize', win,ptb.fixCrossSize); % Instruction Size;
