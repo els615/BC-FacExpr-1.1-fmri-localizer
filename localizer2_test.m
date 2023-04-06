@@ -15,6 +15,7 @@ function localizer2_test(subID,runID)
    
     % Set up the window
     PsychDefaultSetup(2);
+    %RestrictKeysForKbCheck([]);
     Screen('Preference', 'SkipSyncTests', 2)
     screenid = max(Screen('Screens'));
     [win, windowRect] = Screen(screenid, 'openwindow',[1 1 1],[]);
@@ -22,11 +23,22 @@ function localizer2_test(subID,runID)
     p.fixCrossTime = 6; % time fixation cross between blocks 
     ptb.fixCrossSize = 60;
     ptb.backgroundColor = [125 125 125];
+    HideCursor()
 
     %windowPtr=Screen('Windows');
     % Wait for scanner trigger
-    % TODO change tigger key once known
-    func_wait_for_trigger(win,'space')
+    % TODO check with scanner site
+
+    KbName('UnifyKeyNames')
+    buttons.left = '3#';
+    buttons.right = '4$';
+    buttons.triggers = {'=+', '5%', 't'};
+    buttons.escape = 'ESCAPE';
+    buttons.space = 'space';
+    
+    func_wait_for_trigger(win, buttons)
+
+    %func_wait_for_trigger(win,'space')
 
     expStart = GetSecs; % Get time0, check this shouldn't be after instructions
 
@@ -42,6 +54,8 @@ Screen('DrawText', win, 'Press any key to start the experiment...', 40, y + 10 +
 Screen('Flip',win);
 
 % Wait for keypress + release...
+RestrictKeysForKbCheck(KbName({buttons.left,buttons.right,buttons.escape}));
+[keyIsDown, secs, keyCode, deltaSecs] = KbCheck(-3);
 KbStrokeWait;
 
 % Show cleared screen...
@@ -73,7 +87,7 @@ WaitSecs(1)
 
                 %[pressedKey,pressedTimes,t_video_on,t_video_off] = func_playmovie_with_response(filePath,win);
 
-                [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playmovie_with_response(fullfile(pwd,filePath),win);
+                [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playmovie_with_response(fullfile(pwd,filePath),win, buttons);
                 % ^ AA generate a full path for playmovie
 
                 Screen('Flip',win); % clear the screen
@@ -83,14 +97,18 @@ WaitSecs(1)
                     while GetSecs <= (t_hold + 0.4)
                     %WaitSecs(1)
                     Screen('TextSize', win, 80)
-                    DrawFormattedText(win, '.','center','center',[255 255 255]);
+                    %DrawFormattedText(win, '.','center','center',[255 255 255]);
+                    dotx = 0.5 * windowRect(3);
+                    doty = 0.5 * windowRect(4);
+                  
+                    Screen('DrawDots', win, [dotx, doty], 20, [225 225 225], [], 2);
                     Screen('Flip',win);
                     end
                 end
 
                 
             else
-                [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playimage_with_response(fullfile(pwd,filePath),win);
+                [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playimage_with_response(fullfile(pwd,filePath),win, buttons);
                 % Show cleared screen...
                 Screen('Flip',win)
                 t_hold = GetSecs;
@@ -99,7 +117,11 @@ WaitSecs(1)
                     while GetSecs <= (t_hold + 0.4) %@Emily <- why this dif for pics # was 0.5
                     %WaitSecs(1)
                     Screen('TextSize', win, 80)
-                    DrawFormattedText(win, '.','center','center',[255 255 255]);
+                    %DrawFormattedText(win, '.','center','center',[255 255 255]);
+                    dotx = 0.5 * windowRect(3);
+                    doty = 0.5 * windowRect(4);
+                  
+                    Screen('DrawDots', win, [dotx, doty], 20, [225 225 225], [], 2);
                     Screen('Flip',win);
                     end   
                 end
@@ -117,8 +139,8 @@ WaitSecs(1)
         % Make sure we have the folder
         if ~exist('Data','dir')==7;mkdir('Data');end 
 
-        save(fullfile('Data',sprintf('myTrials_S%02d-run-%02d.mat',subID,runID)),'myTrials');
-        save(fullfile('Data',sprintf('workspace_S%02d-run-%02d.mat',subID,runID))); 
+        save(fullfile('localizer2/Data',sprintf('myTrials_S%02d-run-%02d.mat',subID,runID)),'myTrials');
+        save(fullfile('localizer2/Data',sprintf('workspace_S%02d-run-%02d.mat',subID,runID))); 
 
         % fixation cross between blocks 
         Screen('TextSize', win,ptb.fixCrossSize); % Instruction Size;
