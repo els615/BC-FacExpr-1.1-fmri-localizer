@@ -15,6 +15,7 @@ function localizer2_test(subID,runID)
    
     % Set up the window
     PsychDefaultSetup(2);
+    %RestrictKeysForKbCheck([]);
     Screen('Preference', 'SkipSyncTests', 2)
     screenid = max(Screen('Screens'));
     [win, windowRect] = Screen(screenid, 'openwindow',[1 1 1],[]);
@@ -26,8 +27,18 @@ function localizer2_test(subID,runID)
 
     %windowPtr=Screen('Windows');
     % Wait for scanner trigger
-    % TODO change tigger key once known
-    func_wait_for_trigger(win,'space')
+    % TODO check with scanner site
+
+    KbName('UnifyKeyNames')
+    buttons.left = '3#';
+    buttons.right = '4$';
+    buttons.triggers = {'=+', '5%', 't'};
+    buttons.escape = 'ESCAPE';
+    buttons.space = 'space';
+    
+    func_wait_for_trigger(win, buttons)
+
+    %func_wait_for_trigger(win,'space')
 
     expStart = GetSecs; % Get time0, check this shouldn't be after instructions
 
@@ -84,7 +95,11 @@ WaitSecs(1)
                     while GetSecs <= (t_hold + 0.4)
                     %WaitSecs(1)
                     Screen('TextSize', win, 80)
-                    DrawFormattedText(win, '.','center','center',[255 255 255]);
+                    %DrawFormattedText(win, '.','center','center',[255 255 255]);
+                    dotx = 0.5 * windowRect(3);
+                    doty = 0.5 * windowRect(4);
+                  
+                    Screen('DrawDots', win, [dotx, doty], 20, [225 225 225], [], 2);
                     Screen('Flip',win);
                     end
                 end
@@ -100,7 +115,11 @@ WaitSecs(1)
                     while GetSecs <= (t_hold + 0.4) %@Emily <- why this dif for pics # was 0.5
                     %WaitSecs(1)
                     Screen('TextSize', win, 80)
-                    DrawFormattedText(win, '.','center','center',[255 255 255]);
+                    %DrawFormattedText(win, '.','center','center',[255 255 255]);
+                    dotx = 0.5 * windowRect(3);
+                    doty = 0.5 * windowRect(4);
+                  
+                    Screen('DrawDots', win, [dotx, doty], 20, [225 225 225], [], 2);
                     Screen('Flip',win);
                     end   
                 end
