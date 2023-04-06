@@ -54,6 +54,8 @@ Screen('DrawText', win, 'Press any key to start the experiment...', 40, y + 10 +
 Screen('Flip',win);
 
 % Wait for keypress + release...
+RestrictKeysForKbCheck(KbName({buttons.left,buttons.right,buttons.escape}));
+[keyIsDown, secs, keyCode, deltaSecs] = KbCheck(-3);
 KbStrokeWait;
 
 % Show cleared screen...
@@ -85,7 +87,7 @@ WaitSecs(1)
 
                 %[pressedKey,pressedTimes,t_video_on,t_video_off] = func_playmovie_with_response(filePath,win);
 
-                [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playmovie_with_response(fullfile(pwd,filePath),win);
+                [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playmovie_with_response(fullfile(pwd,filePath),win, buttons);
                 % ^ AA generate a full path for playmovie
 
                 Screen('Flip',win); % clear the screen
@@ -106,7 +108,7 @@ WaitSecs(1)
 
                 
             else
-                [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playimage_with_response(filePath,win);
+                [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playimage_with_response(filePath,win,buttons);
                 % Show cleared screen...
                 Screen('Flip',win)
                 t_hold = GetSecs;
