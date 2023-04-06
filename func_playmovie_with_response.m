@@ -1,4 +1,4 @@
-function [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playmovie_with_response(moviename,win)
+function [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playmovie_with_response(moviename,win,buttons)
 
 
 % Open movie file:
@@ -26,11 +26,15 @@ while 1
     % Release texture:
     Screen('Close', tex);
 
-
-    isPressed = 0;
+    RestrictKeysForKbCheck(KbName({buttons.left,buttons.right,buttons.escape}));
+    [keyIsDown, secs, keyCode, deltaSecs] = KbCheck(-3); % KbCheck(-3) scans all devices
+    %isPressed = 0;
     [keyIsDown, secs, keyCode, deltaSecs] = KbCheck;
     if keyIsDown
-        isPressed = 1;
+        %isPressed = 1;
+        if strcmp(KbName(keyCode),buttons.escape); close all;sca;error('Escape Key Pressed'); end
+        %^ if ESC pressed, end experiment
+        
         pressedKey = [pressedKey ',' KbName(keyCode)];
         pressedTimes = [pressedTimes secs-t_video_on];
         DisableKeysForKbCheck(keyCode==1); % is this to reset if they press more than 1 key in video?

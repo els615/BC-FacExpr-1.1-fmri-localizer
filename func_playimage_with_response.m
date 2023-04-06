@@ -1,4 +1,4 @@
-function [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playimage_with_response(image, win)
+function [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playimage_with_response(image, win, buttons)
 
     % open image file
     StimName = image;
@@ -29,10 +29,14 @@ function [pressedKey,pressedTimes,t_video_on,t_video_off] = func_playimage_with_
     Screen('Flip', win);
 
     while GetSecs <= (t_video_on + 2)
-        isPressed = 0;
-        [keyIsDown, secs, keyCode, deltaSecs] = KbCheck;
+        %isPressed = 0;
+        %[keyIsDown, secs, keyCode, deltaSecs] = KbCheck;
+        RestrictKeysForKbCheck(KbName({buttons.left,buttons.right,buttons.escape}));
+        [keyIsDown, secs, keyCode, deltaSecs] = KbCheck(-3); % KbCheck(-3) scans all devices
         if keyIsDown
-            isPressed = 1;
+            %isPressed = 1;
+            if strcmp(KbName(keyCode),buttons.escape); close all;sca;error('Escape Key Pressed'); end
+            
             pressedKey = [pressedKey ',' KbName(keyCode)];
             pressedTimes = [pressedTimes secs-t_video_on];
             DisableKeysForKbCheck(keyCode==1); % is this to reset if they press more than 1 key in video?
