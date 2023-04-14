@@ -22,7 +22,6 @@ function localizer2_test(subID,runID)
     p.fixCrossTime = 6; % time fixation cross between blocks 
     ptb.fixCrossSize = 60;
     ptb.backgroundColor = [125 125 125];
-    HideCursor()
 
     %windowPtr=Screen('Windows');
     % Wait for scanner trigger
